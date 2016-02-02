@@ -83,7 +83,7 @@ router.route('/users/:_id').put(function(req, res, next) {
         });
 
     });
-
+///////
 router.route('/users/:_id').delete(function(req, res, next) {
         User.remove({
             _id: req.params._id
