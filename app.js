@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var http = require('http');
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var api = require('./routes/api')
 
 var app = express();
 var server = http.createServer(app);
@@ -20,14 +21,13 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
+//app.use('/', routes);
 app.use('/users', users);
-
-
+app.use('/api', api);
 
 
 
@@ -63,5 +63,9 @@ app.use(function(err, req, res, next) {
   });
 });
 
-server.listen(3000);
+
+
+
+
+server.listen(80);
 console.log('server started');

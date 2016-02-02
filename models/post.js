@@ -7,10 +7,16 @@ var postSchema = mongoose.Schema({
 		unique: true,
 		default: shortID.generate
 	},
-	creator: { type: String, ref: 'User' }
-	timePosted: { type: Date, default: Date.now },
+	creator: {
+		type: String,
+		ref: 'User'
+	},
+	timePosted: { 
+		type: Date,
+		default: Date.now 
+	},
 	upVotes: {
-		type: int,
+		type: Number,
 		default: 0
 	},
 	upVoters: [{ type: String, ref: 'User' }]
@@ -18,5 +24,7 @@ var postSchema = mongoose.Schema({
 });
 
 var Post = mongoose.model('Post', postSchema);
+
+module.exports = Post;
 
 

@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var shortID = require('shortid');
 
-var userSchema = mongoose.Schema({
+var userSchema = new mongoose.Schema({
 	_id : {
 		type: String,
 		unique: true,
@@ -16,3 +16,4 @@ var userSchema = mongoose.Schema({
 });
 
 var User = mongoose.model('User', userSchema);
+module.exports = User;
