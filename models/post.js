@@ -11,6 +11,7 @@ var postSchema = mongoose.Schema({
 		type: String,
 		ref: 'User'
 	},
+	text: String,
 	timePosted: { 
 		type: Date,
 		default: Date.now 

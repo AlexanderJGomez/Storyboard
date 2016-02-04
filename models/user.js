@@ -7,11 +7,12 @@ var userSchema = new mongoose.Schema({
 		unique: true,
 		default: shortID.generate
 	},
-	firstName: String,
-	lastName: String,
+	userName: {
+		type : String,
+		required : true
+	},
 	joinDate: { type: Date, default: Date.now },
 	friends: [{ type: String, ref: 'User' }],
-	posts: [{ type: String, ref: 'Post' }],
 	profilePicture: String
 });
 
