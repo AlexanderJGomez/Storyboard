@@ -6,6 +6,7 @@ var Invite = require('../models/invite');
 var userController = require('../controllers/userController');
 var postController = require('../controllers/postController');
 var inviteController = require('../controllers/inviteController');
+var //async = require('async');
 
 
 
@@ -75,19 +76,57 @@ router.delete('/users/:_id', function(req, res, next) {
     });
 
 
-//add each other to both users friends lists
-router.put('/users/request/:_id1/:_id2', function(req, res, next) { 
-	//console.log('adding friends  %s  and  %s', req.params._id1, req.params._id2);
-	inviteController.requestFriend(req.params._id1, req.params._id2, res, next);
+//request friendship
+router.put('/users/request/:_originid/:_targetid', function(req, res, next) { 
+	
+		User.findById(req.params._originid, function(err, user) {
+			if(user == undefined) {
+				return res.json({message: 'origin was not found'});
+			}
+		
+
+			console.log(user.friends.indexOf(req.params._targetid));
+
+			if(user.friends.indexOf(req.params._targetid) >= 0) {
+				return res.json({message : 'already friends'});
+			}
+			else {
+				Invite.findOne({
+					origin: req.params._originid,
+					target: req.params._targetid}, new function(err, invite) {
+						if(err) {
+							return res.send(err);
+						}
+						else if(invite == undefined) {
+							inviteController.requestFriend(req.params._originid, req.params._targetid, res, next);
+
+						}
+						else {
+							return res.json({message: 'Your request is pending'});
+				//next();
+						}
+				});
+	//console.log('adding friends  %s  and  %s', req.params._id1, req.params._id		}
+		}});
+
+		
 });
 
 
 
 
-//add each other to both users friends lists
-router.put('/users/accept/:originid/:targetid', function(req, res, next) { 
+//accept each other to both users friends lists
+router.put('/users/accept/:_originid/:_targetid', function(req, res, next) { 
 	//console.log('adding friends  %s  and  %s', req.params.originid, req.params.targetid);
-	inviteController.acceptFriend(req.params.originid, req.params.targetid, res, next);
+	User.findById(req.params._originid, function(err, user) {
+		if(user.friends.indexOf(req.params._targetid) >= 0) {
+			return res.json({message : 'They are already friends'});
+			//next();
+		}
+		else {
+			inviteController.acceptFriend(req.params._originid, req.params._targetid, res, next);
+		}
+	});
 });
 
 

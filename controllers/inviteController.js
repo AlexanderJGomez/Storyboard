@@ -8,8 +8,9 @@ exports.requestFriend = function(originID, targetID, res, next) {
         origin: originID,
         target: targetID
     }, function(err, newInvite) {
-        	if(err)
-        		return res.send(err);
+        	if(err) {
+        		return res.send(err); 
+        	}
 
         	return res.json(newInvite);
 
@@ -18,12 +19,18 @@ exports.requestFriend = function(originID, targetID, res, next) {
 }
 
 
+
+
+
+
 exports.acceptFriend = function(originID, targetID, res, next) {
-    
+
+
+
     Invite.findOneAndRemove({
     	origin: originID,
     	target: targetID
-    }, function(err, delInvite) {
+    }, function(err, invite) {
     	if(err)
     		return res.send(err);
 
@@ -31,7 +38,7 @@ exports.acceptFriend = function(originID, targetID, res, next) {
 
 
     var userName1 = '';
-    User.findByIdAndUpdate(originID, {$addToSet: {"friends": targetID} }, {new: true, safe: true, upsert: true},
+    User.findByIdAndUpdate(originID, {$addToSet: {"friends" : targetID} }, {new: true},
         function(err, user) {
             if(err)
                 return res.send(err);
@@ -42,10 +49,12 @@ exports.acceptFriend = function(originID, targetID, res, next) {
 
     var userName2 = '';
 
-    User.findByIdAndUpdate(targetID, {$addToSet: {"friends": originID} }, {new: true, safe: true, upsert: true}, 
+    User.findByIdAndUpdate(targetID, {$addToSet: {"friends" : originID} }, {new: true}, 
         function(err, user) {
                     if(err) 
                         return res.send(err);
+
+                    
 
                     userName2 = user.userName;
 
