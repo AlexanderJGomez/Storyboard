@@ -9,10 +9,11 @@ var userSchema = new mongoose.Schema({
 	},
 	userName: {
 		type : String,
-		required : true
+		required : true,
+		unique: true
 	},
 	joinDate: { type: Date, default: Date.now },
-	friends: [{ type: String, ref: 'User' }],
+	friends: [{ type: String, ref: 'User', unique: true }],
 	profilePicture: String
 });
 

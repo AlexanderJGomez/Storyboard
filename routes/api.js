@@ -2,8 +2,10 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var Post = require('../models/post');
+var Invite = require('../models/invite');
 var userController = require('../controllers/userController');
 var postController = require('../controllers/postController');
+var inviteController = require('../controllers/inviteController');
 
 
 
@@ -37,19 +39,19 @@ router.post('/users',  function(req, res, next) {
 
 //get all the users
 router.get('/users', function(req, res, next) {
-	userController.getUsers(req, res, next);
+	userController.getAllUsers(res, next);
 });
 
 
 // get the user with that id (accessed at GET http://storyboard.dev/api/users/:_id)
 router.get('/users/:_id', function(req, res, next) {
-        userController.findUser(req, res, next);
+        userController.findUser(req.params._id, res, next);
     });
 
 
 
 // update the user with this id (accessed at PUT http://localhost:80/api/users/:_id)
-router.put('/users/:_id', function(req, res, next) {
+router.put('/users', function(req, res, next) {
     	var userMap = {};
         if(req.body.userName != undefined) {
             userMap.userName = req.body.userName;
@@ -62,14 +64,31 @@ router.put('/users/:_id', function(req, res, next) {
         }
 
 
-    	userController.updateUser(req.params._id, userMap, res, next);
+    	userController.updateUser(req.body._id, userMap, res, next);
     });
 
 
-///////
+///////delete a user
 router.delete('/users/:_id', function(req, res, next) {
         userController.removeUser(req, res, next);
+
     });
+
+
+//add each other to both users friends lists
+router.put('/users/request/:_id1/:_id2', function(req, res, next) { 
+	//console.log('adding friends  %s  and  %s', req.params._id1, req.params._id2);
+	inviteController.requestFriend(req.params._id1, req.params._id2, res, next);
+});
+
+
+
+
+//add each other to both users friends lists
+router.put('/users/accept/:originid/:targetid', function(req, res, next) { 
+	//console.log('adding friends  %s  and  %s', req.params.originid, req.params.targetid);
+	inviteController.acceptFriend(req.params.originid, req.params.targetid, res, next);
+});
 
 
 
@@ -79,15 +98,39 @@ router.delete('/users/:_id', function(req, res, next) {
 ////////////////////////////////////////////////////////
 
 
-router.post('/posts/newpost/:_id', function(req, res, next) {
+
+
+
+router.post('/posts', function(req, res, next) {
 	var postMap = {
 		text: req.body.text,
-		creator: req.params._id
+		creator: req.body._id
 	}
-	postController.createPost(req.params._id, postMap, res, next);
+	postController.createPost(req.body._id, postMap, res, next);
 });
 
 
+
+router.get('/posts', function(req, res, next) {
+	postController.getAllPosts(res, next);
+});
+
+
+
+
+router.delete('/posts/:_id', function(req, res, next) {
+	Post.remove({
+            _id: req.params._id
+        }, function(err, post) {
+            if (err)
+                return res.send(err);
+
+            return res.json({ message: 'Successfully deleted post' });
+        });
+});
+
+
+//router.post('/post/')
 
 
 

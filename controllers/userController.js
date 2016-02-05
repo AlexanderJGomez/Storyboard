@@ -24,7 +24,7 @@ exports.create = function(req, res, next) {
         });
     }
 
-exports.getUsers = function(req, res, next) {
+exports.getAllUsers = function(res, next) {
     User.find(function(err, users) {
             if (err)
                 return res.send(err);
@@ -33,8 +33,8 @@ exports.getUsers = function(req, res, next) {
         });
 }
 
-exports.findUser = function(req, res, next){
-    User.findById(req.params._id, function(err, user) {
+exports.findUser = function(id, res, next){
+    User.findById(id, function(err, user) {
             if (err)
                 return res.send(err);
 
@@ -51,9 +51,7 @@ exports.updateUser = function(id, userMap, res, next) {
 
         return res.json(user);
         });
-
 }
-
 
 
 
@@ -67,4 +65,9 @@ exports.removeUser = function(req, res, next) {
             return res.json({ message: 'Successfully deleted' });
         });
 }
+
+
+
+
+
 
