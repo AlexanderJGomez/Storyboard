@@ -50,6 +50,28 @@ router.get('/users/:_id', function(req, res, next) {
     });
 
 
+//get the users current frontpage
+router.get('/users/:_id/frontpage', function(req, res, next) {
+	User.findById(req.params._id, function(err, user) {
+        if(err) {
+            return;
+        }
+        else {
+        	var allUsers = user.friends;
+        	allUsers.push(req.params._id);
+        	Post.find({creator: {$in : allUsers}}, function(err, posts) {
+        		if(err)
+        			res.send(err)
+				
+				return res.json(posts);
+			});
+    	}
+    });
+
+
+});
+
+
 
 // update the user with this id (accessed at PUT http://localhost:80/api/users/:_id)
 router.put('/users', function(req, res, next) {
@@ -143,15 +165,19 @@ router.put('/users/accept/:_originid/:_targetid', function(req, res, next) {
 router.post('/posts', function(req, res, next) {
 	var postMap = {
 		text: req.body.text,
-		creator: req.body._id
+		creator: req.body.creator
 	}
-	postController.createPost(req.body._id, postMap, res, next);
+	postController.createPost(req.body.creator, postMap, res, next);
 });
 
 
 
 router.get('/posts', function(req, res, next) {
 	postController.getAllPosts(res, next);
+});
+
+router.get('/posts/:id', function(req, res, next) {
+	postController.getPost(req.params.id, res, next);
 });
 
 

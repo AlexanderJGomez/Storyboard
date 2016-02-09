@@ -18,6 +18,14 @@ exports.createPost = function(id, postMap, res, next) {
 }
 
 
+exports.getPost = function(id, res, next) {
+    Post.findById(id, function(err, post) {
+        if(err)
+            res.send(err);
+        return res.json(post);
+    });
+}
+
 
 exports.getAllPosts = function(res, next) {
     Post.find(function(err, posts) {
