@@ -43,7 +43,7 @@ exports.acceptFriend = function(originID, targetID, res, next) {
             if(err)
                 return res.send(err);
 
-            userName1 = user.userName;
+            userName1 = user.username;
     });
 
 
@@ -56,7 +56,7 @@ exports.acceptFriend = function(originID, targetID, res, next) {
 
                     
 
-                    userName2 = user.userName;
+                    userName2 = user.username;
 
             return res.json({
                 user1: userName1,

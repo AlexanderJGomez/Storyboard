@@ -6,7 +6,7 @@ var Invite = require('../models/invite');
 var userController = require('../controllers/userController');
 var postController = require('../controllers/postController');
 var inviteController = require('../controllers/inviteController');
-var //async = require('async');
+//var async = require('async');
 
 
 
@@ -22,7 +22,7 @@ router.use(function(req, res, next) {
 
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function(req, res) {
-    res.json({ message: 'hooray! welcome to our api!' });   
+    res.send({ message: 'hooray! welcome to our api!' });   
 });
 
 

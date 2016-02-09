@@ -1,4 +1,5 @@
 var User = require('../models/user');
+var bcrypt = require('bcryptjs');
 
 
 
@@ -7,11 +8,14 @@ exports.create = function(req, res, next) {
 
 
         //console.log(req.body);
-        if(req.body.userName == undefined) {
+        if(req.body.username == undefined || req.body.password == undefined) {
             return {error : 'error'};
         }
+        var salt = bcrypt.genSaltSync(10);
+        var hash = bcrypt.hashSync(req.body.password, salt);
         var user = {
-        	userName: req.body.userName
+        	username: req.body.username,
+            password: hash
         };
 
         console.log(user);
