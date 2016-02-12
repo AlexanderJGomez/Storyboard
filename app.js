@@ -148,7 +148,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
 
 passport.serializeUser(function(user, done) {
   if (user)
-    done(null, user._id);
+    done(null, user);
 });
 passport.deserializeUser(function(user_id, done) {
   User.findOne({_id: user_id}, function(err, user) {

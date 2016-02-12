@@ -3,4 +3,8 @@ extends layout
 
 block content
 	div(id='app')
+	script(type='text/javascript').
+		// jenk global variable bootstrapping
+		window.storyboard = {};
+		window.storyboard.user = !{JSON.stringify(user || {})};
 	script(type="text/javascript" src="http://localhost:8888/build/app.bundle.js")
