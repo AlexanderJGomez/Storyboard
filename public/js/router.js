@@ -1,8 +1,8 @@
 var Backbone = require('backbone');
 var _ = require('underscore');
 
-var Router = Backbone.router.extend(
-	{
+var Router = Backbone.Router.extend({
+	routes: {
 		'home' : 'home',
 		'login' : 'login',
 		'register' : 'register'

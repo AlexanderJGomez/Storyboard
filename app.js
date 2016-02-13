@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var http = require('http');
 var routes = require('./routes/index');
-var users = require('./routes/users');
 var api = require('./routes/api');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -43,13 +42,13 @@ app.use(cookieParser());
 
 
 
-/*
+
 app.use(expressSession({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: false
 }));
-*/
+
 
 
 
@@ -67,6 +66,7 @@ app.get('/login', function(req, res) {
 });
 
 
+
 app.post('/login',
   passport.authenticate('local', {
     successRedirect: '/home',
@@ -77,6 +77,9 @@ app.post('/login',
 app.get('/loginFailure', function(req, res, next) {
   res.send('Failed to authenticate');
 });
+app.get('/home', function(req, res, next) {
+  res.render('app', {user: req.user});
+})
 /*
 app.get('/loginSuccess', function(req, res, next) {
   res.redirect('Successfully authenticated');
@@ -87,37 +90,6 @@ app.get('/loginSuccess', function(req, res, next) {
 var isValidPassword = function(user, password){
   return bcrypt.compareSync(password, user.password);
 }
-
-/*
-passport.use('login', new LocalStrategy({
-    passReqToCallback : true
-  },
-  function(req, username, password, done) { 
-    // check in mongo if a user with username exists or not
-    User.findOne({ 'username' :  username }, 
-      function(err, user) {
-        // In case of any error, return using the done method
-        if (err)
-          return done(err);
-        // Username does not exist, log error & redirect back
-        if (!user){
-          console.log('User Not Found with username ' + username);
-          return done(null, false, req.flash('message', 'You are not a user'));                 
-        }
-        // User exists but wrong password, log the error 
-        if (!isValidPassword(user, password)){
-          console.log('Invalid Password');
-          return done(null, false, 
-              req.flash('message', 'Invalid Password'));
-        }
-        // User and password both match, return user from 
-        // done method which will be treated like success
-        return done(null, user);
-      }
-    );
-}));
-*/
-
 
 
 
@@ -148,7 +120,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
 
 passport.serializeUser(function(user, done) {
   if (user)
-    done(null, user);
+    done(null, user._id);
 });
 passport.deserializeUser(function(user_id, done) {
   User.findOne({_id: user_id}, function(err, user) {
@@ -161,12 +133,11 @@ passport.deserializeUser(function(user_id, done) {
 
 
 
+
+
 app.use('/', routes);
-app.use('/users', users);
 app.use('/api', api);
-app.get('/helloworld', function (req, res, next) {
-  res.render('helloworld', {title: 'dicks'});
-})
+
 /*
 app.get('/login', function (req, res, next) {
   res.render('login');
