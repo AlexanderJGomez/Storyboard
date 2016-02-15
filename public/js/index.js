@@ -8,7 +8,7 @@ var RegisterPage = require('./registerpage.jsx');
 var App = React.createClass({
     
     render: function() {
-    	return <div> <p>{"yo"}</p> <InterfaceComponent/> </div>
+    	return <div> <InterfaceComponent/> </div>
     }
 });
 
@@ -23,18 +23,23 @@ var InterfaceComponent = React.createClass({
 		router.off('route', this.callback);
 	},
 	render: function() {
-		//console.log(router.current);
 		switch(router.current) {
+			case '':
+			return <NavPage />;
 			case 'home':
+			//router.navigate('home', {trigger: true});
 			return <HomePage />
 			break;
 			case 'login':
+			//router.navigate('login', {trigger: true});
 			return <LoginPage />
 			break;
 			case 'register':
+			//router.navigate('register', {trigger: true});
 			return <RegisterPage />
 			break;
 			default:
+			//router.navigate('login', {trigger: true});
 			return <LoginPage />
 			break;
 		}

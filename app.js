@@ -60,11 +60,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+/*
 app.get('/login', function(req, res) {
   res.render('login');
 });
-
+*/
 
 
 app.post('/login',
@@ -77,6 +77,7 @@ app.post('/login',
 app.get('/loginFailure', function(req, res, next) {
   res.send('Failed to authenticate');
 });
+
 app.get('/home', function(req, res, next) {
   res.render('app', {user: req.user});
 })

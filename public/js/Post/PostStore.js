@@ -2,6 +2,7 @@ var Backbone = require('backbone');
 var _ = require('underscore');
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var CONSTANTS = require('../constants');
+var PostCollection = require('./PostCollection');
 
 var _posts = {};
 // Method to load shoes from action data
@@ -12,6 +13,7 @@ function loadPosts(data) {
 
 var PostStore = _.extend({}, Backbone.Events);
 _.extend(PostStore, {
+  posts: new PostCollection,
   getPosts: function() {
 		return _posts;
 	},
@@ -23,20 +25,28 @@ _.extend(PostStore, {
   },
   removeChangeListener: function(callback) {
     this.removeListener('change', callback);
-  }
-});
-
-// Register dispatcher callback
-AppDispatcher.register(function(payload) {
+  },
+  handleDispatch: function(payload) {
   var action = payload.action;
   var text;
   // Define what to do for certain actions
   switch(action.actionType) {
-    case CONSTANTS.POSTS.LOAD_POSTS:
+    case POSTS.FETCH_SINGLE:
+        var post_id = payload.post_id;
+        fetch('storyboard.dev/api' + '/posts/' + post_id, {
+          method: 'GET'
+        })
+        .then(res => res.json())
+        .then(res => {
+          this.trigger(POST.CHANGE_ALL);
+        })
+        .catch(err => {
+        });
+        break;
+    case POSTS.LOAD_POSTS:
       // Call internal method based upon dispatched action
       loadPosts(action.data);
       break;
-
     default:
       return true;
   }
@@ -47,6 +57,9 @@ AppDispatcher.register(function(payload) {
   return true;
 
 });
+
+var dispatchToken = AppDispatcher.register(PostStore.handleDispatch.bind(PostStore));
+PostStore.dispatchToken = dispatchToken;
 
 module.exports = PostStore;
 

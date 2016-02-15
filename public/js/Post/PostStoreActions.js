@@ -1,13 +1,19 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
-var CONSTANTS = require('../constants');
+var POSTS = require('../constants').POSTS;
 
 var PostStoreActions = {
 
   loadPosts: function(data) {
-    AppDispatcher.handleAction({
-      actionType: CONSTANTS.POSTS.LOAD_POSTS,
+    AppDispatcher.dispatch({
+      actionType: POSTS.LOAD_POSTS,
       data: data
+    }),
+    fetchSingle: function(post_id) {
+    AppDispatcher.dispatch({
+      actionType: POSTS.FETCH_SINGLE,
+      post_id: post_id
     });
+  };
   }
 };
 

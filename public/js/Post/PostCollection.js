@@ -3,7 +3,7 @@ var PostModel = require('./PostModel');
 
 var PostCollection = Backbone.Collection.extend({
   model: PostModel,
-  url: "/api/posts"
+  url: "storyboard.dev/api/posts"
 });
 
 module.exports = PostCollection;

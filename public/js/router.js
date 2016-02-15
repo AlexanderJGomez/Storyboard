@@ -8,6 +8,7 @@ var Router = Backbone.Router.extend({
 		'register' : 'register'
 	},
 	home() {
+		console.log('sup');
 		this.current = 'home';
 	},
 	login() {

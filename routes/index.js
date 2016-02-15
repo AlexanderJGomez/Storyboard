@@ -18,14 +18,7 @@ router.get('/', function (req, res) {
 //////////////////REGISTRATION ROUTES//////////////
 
 
-
-
-router.get('/register', function(req, res) {
-    React.render(new HelloWorld(), document.getElementById('test'));
-
-    //res.render('register', { });
-});
-
+/*
 router.post('/register', function(req, res) {
     User.register(new User({ username : req.body.username }), req.body.password, function(err, account) {
         if (err) {
@@ -37,6 +30,7 @@ router.post('/register', function(req, res) {
         });
     });
 });
+*/
 
 
 ///////////////////LOGIN/LOGOUT ROUTES//////////
@@ -44,9 +38,6 @@ router.post('/register', function(req, res) {
 
 
 
-router.get('/login', function(req, res) {
-    res.render('login', { user : req.user });
-});
 
 
 router.post('/login', passport.authenticate('local'), function(req, res) {
@@ -57,14 +48,6 @@ router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
-
-//////////////////////HOME ROUTES
-router.get('/home', function(req, res) {
-    res.render('home', {title : 'Storyboard'});
-})
-
-
-router.use('/api', api);
 
 
 
