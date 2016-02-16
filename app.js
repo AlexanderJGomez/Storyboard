@@ -67,7 +67,7 @@ app.get('/login', function(req, res) {
 */
 
 
-app.post('/login',
+app.post('/login', 
   passport.authenticate('local', {
     successRedirect: '/home',
     failureRedirect: '/loginFailure'
@@ -78,9 +78,6 @@ app.get('/loginFailure', function(req, res, next) {
   res.send('Failed to authenticate');
 });
 
-app.get('/home', function(req, res, next) {
-  res.render('app', {user: req.user});
-})
 /*
 app.get('/loginSuccess', function(req, res, next) {
   res.redirect('Successfully authenticated');
@@ -100,10 +97,10 @@ passport.use(new LocalStrategy(function(username, password, done) {
     User.findOne({
       'username': username, 
     }, function(err, user) {
+      console.log('entered local strategy');
       if (err) {
         return done(err);
       }
-
       if (!user) {
         return done(null, false);
       }
@@ -136,18 +133,19 @@ passport.deserializeUser(function(user_id, done) {
 
 
 
-app.use('/', routes);
+var routes = require('./routes')(app);
 app.use('/api', api);
 
 /*
 app.get('/login', function (req, res, next) {
   res.render('login');
 })
+*/
 
 app.post('/login', function(req, res, next) {
   console.log(req.body.username, req.body.password);
 })
-*/
+
 
 
 // catch 404 and forward to error handler

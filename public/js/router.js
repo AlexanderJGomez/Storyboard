@@ -7,25 +7,23 @@ var Router = Backbone.Router.extend({
 		'login' : 'login',
 		'register' : 'register'
 	},
-	home() {
+	home: function() {
 		console.log('sup');
 		this.current = 'home';
+		//window.location.reload();
 	},
-	login() {
+	login: function() {
+		console.log('you are visiting the login page right now');
 		this.current = 'login';
+		//window.location.reload();
 	},
-	register() {
+	register: function() {
+		console.log('you are visiting the register page right now');
 		this.current = 'register';
+		//window.location.reload();
 	}
 });
 
-function checkUser() {
-  //console.log(window.bootstrap);
-  if(_.isEmpty(window.storyboard.user)) {
-    return false
-  }
-  return true
-}
 
 var router = new Router();
 module.exports = router;

@@ -33,13 +33,10 @@ _.extend(PostStore, {
   switch(action.actionType) {
     case POSTS.FETCH_SINGLE:
         var post_id = payload.post_id;
-        fetch('storyboard.dev/api' + '/posts/' + post_id, {
+        fetch('storyboard.dev/api/posts/' + post_id, {
           method: 'GET'
         })
         .then(res => res.json())
-        .then(res => {
-          this.trigger(POST.CHANGE_ALL);
-        })
         .catch(err => {
         });
         break;

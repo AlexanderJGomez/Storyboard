@@ -1,6 +1,8 @@
 var React = require('react');
 var _ = require('underscore');
 var {Button, Form, Input} = require('react-bootstrap');
+var UserStore = require('./User/UserStore');
+var UserActions = require('./User/UserStore');
 
 var LoginPage = React.createClass({
 	getInitialState: function() {
@@ -10,13 +12,13 @@ var LoginPage = React.createClass({
             };
         },
     handleUsername : function() {
-        this.setState({username : this.refs.Username.getValue()})
+        this.setState({username : this.refs.Username.getValue()});
     },
     handlePassword : function() {
         this.setState({password: this.refs.Password.getValue()});
     },
     signIn: function() {
-        console.log(this.state.username +  ' ' + this.state.password);
+        UserActions.login();
     },
     render: function() {
         if(!_.isEmpty(window.storyboard.user)) {
@@ -24,7 +26,7 @@ var LoginPage = React.createClass({
         }
         else {
         return (
-            <div action="/login" method="post">
+            <div >
                 <div>
                     <Input
                         type="text"
@@ -47,7 +49,10 @@ var LoginPage = React.createClass({
                         onChange={this.handlePassword} />
                 </div>
                 <div>
-                    <Button onClick = {this.signIn}>Submit</Button>
+                    <Button
+                    onClick = {this.signIn()} >
+                    Submit
+                    </Button>
                 </div>
             </div>
 
