@@ -39,10 +39,6 @@ app.use(cookieParser());
 
 
 
-
-
-
-
 app.use(expressSession({
     secret: 'keyboard cat',
     resave: false,
@@ -66,36 +62,16 @@ app.get('/login', function(req, res) {
 });
 */
 
-
-app.post('/login', 
-  passport.authenticate('local', {
-    successRedirect: '/home',
-    failureRedirect: '/loginFailure'
-  })
-);
-
-app.get('/loginFailure', function(req, res, next) {
-  res.send('Failed to authenticate');
-});
-
-/*
-app.get('/loginSuccess', function(req, res, next) {
-  res.redirect('Successfully authenticated');
-});
-*/
-
-
 var isValidPassword = function(user, password){
   return bcrypt.compareSync(password, user.password);
 }
 
 
-
-
-passport.use(new LocalStrategy(function(username, password, done) {
-  process.nextTick(function() {
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    console.log(username + password);
     User.findOne({
-      'username': username, 
+      username: username, 
     }, function(err, user) {
       console.log('entered local strategy');
       if (err) {
@@ -110,9 +86,39 @@ passport.use(new LocalStrategy(function(username, password, done) {
       }
 
       return done(null, user);
-    });
   });
 }));
+
+
+app.post('/login', 
+  passport.authenticate('local', { successRedirect: '/home',
+                                   failureRedirect: '/login'}),
+  function(req, res) {
+    console.log(req, res);
+    return res.send(req.user);
+  }
+);
+
+app.get('/loginFailure', function(req, res, next) {
+  res.send('Failed to authenticate');
+});
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
+
+/*
+app.get('/loginSuccess', function(req, res, next) {
+  res.redirect('Successfully authenticated');
+});
+*/
+
+
+
+
+
+
 
 
 
@@ -120,6 +126,7 @@ passport.serializeUser(function(user, done) {
   if (user)
     done(null, user._id);
 });
+
 passport.deserializeUser(function(user_id, done) {
   User.findOne({_id: user_id}, function(err, user) {
     if (err) done(err, null);
@@ -142,11 +149,6 @@ app.get('/login', function (req, res, next) {
 })
 */
 
-app.post('/login', function(req, res, next) {
-  console.log(req.body.username, req.body.password);
-})
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -161,6 +163,7 @@ app.use(function(req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
+    console.error(err);
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,

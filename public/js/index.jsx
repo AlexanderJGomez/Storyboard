@@ -5,6 +5,7 @@ var injectTapEventPlugin = require("react-tap-event-plugin");
 var router = require('./router');
 var RegisterPage = require('./registerpage.jsx');
 var NavPage = require('./NavPage');
+var HomePage = require('./homepage');
 
 var App = React.createClass({
     

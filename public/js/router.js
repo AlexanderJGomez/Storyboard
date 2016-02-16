@@ -27,4 +27,4 @@ var Router = Backbone.Router.extend({
 
 var router = new Router();
 module.exports = router;
-Backbone.history.start({pushstate : true});
+Backbone.history.start({pushState : true});
