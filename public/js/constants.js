@@ -7,5 +7,6 @@ exports.POSTS  = {
 }
 
 exports.USER = {
-	LOGIN : 'login'
+	LOGIN : 'login',
+	REGISTER: 'register'
 }

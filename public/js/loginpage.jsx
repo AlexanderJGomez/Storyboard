@@ -3,6 +3,7 @@ var _ = require('underscore');
 var {Button, Input, ButtonInput} = require('react-bootstrap');
 var UserStore = require('./User/UserStore');
 var UserActions = require('./User/UserStore');
+var Router = require('./router');
 
 var LoginPage = React.createClass({
 	getInitialState: function() {
@@ -19,12 +20,14 @@ var LoginPage = React.createClass({
     },
     signIn: function() {
         UserActions.login(this.state.username, this.state.password);
+        Router.navigate('/home', {trigger: true});
     },
     render: function() {
         if(!_.isEmpty(window.storyboard.user)) {
             return <p>you are already logged in </p>
         }
         else {
+            
         return (
             <div >
                 <form action="/login" method="post">
@@ -40,10 +43,10 @@ var LoginPage = React.createClass({
                         <input type="submit" value="Log In"/>
                     </div>
                 </form>
-            </div>
+            </div>);
+    }
 
-)};
-	}
+    }
 })
 
 module.exports = LoginPage;

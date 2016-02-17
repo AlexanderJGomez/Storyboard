@@ -22,38 +22,61 @@ _.extend(UserStore, {
         var password = payload.password;
         this.login(username, password);
         break;
-    }
+      case USER.REGISTER:
+        var username = payload.username;
+        var password = payload.password;
+        this.register(username, password);
+        break;
+      }
     UserStore.emitChange();
-},
-emitChange: function() {
+  },
+  emitChange: function() {
     this.trigger('change');
-},
-login: function(username, password) {
-    //this.trigger(USER.LOGGING_IN);
-    fetch('/login', {
-      method: 'POST',
-      body: JSON.stringify({
-        username: username,
-        password: password
-      })
-    })
-    .then(res => res.json())
-    .then(res => {
-      console.log('login success', res.user._id);
-      // set the new user
-      this.setUser(res.user);
-      // trigger success
-      //this.trigger(USER.LOGIN_SUCCESS);
-    })
-    .catch(err => {
-      console.log('login error', err.toString());
-      //this.trigger(USER.LOGIN_ERROR, err.toString());
-    });
   },
   setUser: function(user) {
     this.user = new UserModel(user);
     this.user.url = 'storyboard.dev/users/' + this.user.get('_id');
     //this.trigger(USER.CHANGE_ALL);
+  },
+  login: function(newusername, newpassword) {
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+      body: JSON.stringify({
+        username: newusername,
+        password: newpassword
+      })
+    }).then(res => res.json())
+    .then(res=>{
+      console.log('login success');
+    })
+    .catch(error => {
+          console.log('login error', error.toString());
+          //this.trigger(USER.REGISTER_ERROR);
+        })
+  },
+  register: function(newusername, newpassword) {
+    fetch('/api/users', {
+      method: 'POST',
+      headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+      body: JSON.stringify({
+        username: newusername,
+        password: newpassword
+      })
+    }).then(res => res.json())
+    .then(res=>{
+      console.log('register success');
+    })
+    .catch(error => {
+          console.log('register error', error.toString());
+          //this.trigger(USER.REGISTER_ERROR);
+        })
   }
 });
 

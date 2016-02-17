@@ -45,14 +45,12 @@ _.extend(PostStore, {
       loadPosts(action.data);
       break;
     default:
-      return true;
+      return false;
   }
-  
   // If action was acted upon, emit change event
   PostStore.emitChange();
-
   return true;
-
+}
 });
 
 var dispatchToken = AppDispatcher.register(PostStore.handleDispatch.bind(PostStore));

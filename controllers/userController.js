@@ -17,8 +17,6 @@ exports.create = function(req, res, next) {
         	username: req.body.username,
             password: hash
         };
-
-        console.log(user);
         // save the bear and check for errors
         User.create(user, function(err, newUser) {
             if (err)

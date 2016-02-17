@@ -95,7 +95,7 @@ app.post('/login',
                                    failureRedirect: '/login'}),
   function(req, res) {
     console.log(req, res);
-    return res.send(req.user);
+    return res.json(user);
   }
 );
 
