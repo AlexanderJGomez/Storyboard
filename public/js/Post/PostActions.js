@@ -9,11 +9,23 @@ var PostActions = {
       data: data
     });
   },
-    fetchSingle: function(post_id) {
+  fetchSingle: function(post_id) {
     AppDispatcher.dispatch({
       actionType: POSTS.FETCH_SINGLE,
       post_id: post_id
     });
+  },
+  createPost: function(content) {
+    AppDispatcher.dispatch({
+      actionType: POSTS.CREATE,
+      text: content
+    });
+  },
+  getFrontpagePosts : function(userid)  {
+    AppDispatcher.dispatch({
+      actionType: POSTS.FRONTPAGE_POSTS,
+      userid: userid
+    })
   }
 };
 

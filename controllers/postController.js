@@ -9,11 +9,8 @@ exports.createPost = function(id, postMap, res, next) {
         	if(err)
         		res.send(err);
         	
-        	return res.json({
-        			userWhoPosted: id,
-        			postAddedSays: newPost.text
-        		});
-});
+        	return res.json(newPost);
+        });
 
 }
 
