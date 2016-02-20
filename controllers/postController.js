@@ -9,6 +9,13 @@ exports.createPost = function(id, postMap, res, next) {
         	if(err)
         		res.send(err);
         	
+
+            var opts = [{ path: 'creator', select: 'username' }]
+            Post.populate(newPost, opts, function (err, user) {
+                if(err)
+                    res.send(err);
+            });
+
         	return res.json(newPost);
         });
 

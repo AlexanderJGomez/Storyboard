@@ -69,11 +69,11 @@ var isValidPassword = function(user, password){
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    console.log(username + password);
+    //console.log(username + password);
     User.findOne({
       username: username, 
     }, function(err, user) {
-      console.log('entered local strategy');
+      //console.log('entered local strategy');
       if (err) {
         return done(err);
       }
@@ -139,9 +139,8 @@ passport.deserializeUser(function(user_id, done) {
 
 
 
-
-var routes = require('./routes')(app);
 app.use('/api', api);
+var routes = require('./routes')(app);
 
 /*
 app.get('/login', function (req, res, next) {

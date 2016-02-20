@@ -12,15 +12,15 @@ var NavPage = React.createClass({
 	render: function() {
 		return (
 			<div>
-			<Button 
-			onClick={this.onLoginClick}>
-			Login 
-			</Button>
-			<p></p>
-			<Button 
-			onClick={this.onRegisterClick}>
-			Register
-			</Button>
+				<Button 
+					onClick={this.onLoginClick}>
+					Login 
+				</Button>
+				<p></p>
+				<Button 
+					onClick={this.onRegisterClick}>
+					Register
+				</Button>
 		</div>);
 }
     

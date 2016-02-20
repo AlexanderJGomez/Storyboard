@@ -21,10 +21,9 @@ var PostActions = {
       text: content
     });
   },
-  getFrontpagePosts : function(userid)  {
+  getFrontpagePosts : function()  {
     AppDispatcher.dispatch({
-      actionType: POSTS.FRONTPAGE_POSTS,
-      userid: userid
+      actionType: POSTS.FRONTPAGE_POSTS
     })
   }
 };

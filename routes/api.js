@@ -52,11 +52,13 @@ router.get('/users/:_id', function(req, res, next) {
 
 //get the users current frontpage
 router.get('/users/:_id/frontpage', function(req, res, next) {
+	console.log(req.params._id);
 	User.findById(req.params._id, function(err, user) {
         if(err) {
-            return;
+            res.send(err);
         }
         else {
+        	console.log(user.friends);
         	var allUsers = user.friends;
         	allUsers.push(req.params._id);
         	Post.find({creator: {$in : allUsers}}, function(err, posts) {
@@ -64,7 +66,8 @@ router.get('/users/:_id/frontpage', function(req, res, next) {
         			res.send(err)
 				
 				return res.json(posts);
-			});
+			})
+			.populate('creator', 'username');
     	}
     });
 

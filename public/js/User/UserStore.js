@@ -13,7 +13,7 @@ var user = window.storyboard.user;
 
 var UserStore = _.extend({}, Backbone.Events);
 _.extend(UserStore, {
-	user: new UserModel,
+	storedUser: new UserModel,
   loggedIn: false,
   handleDispatch: function(payload) {
     switch(payload.actionType) {
@@ -33,10 +33,13 @@ _.extend(UserStore, {
   emitChange: function() {
     this.trigger('change');
   },
+  getUser: function() {
+    return this.storedUser.toJSON();
+  },
   setUser: function(user) {
-    this.user = new UserModel(user);
-    this.user.url = 'storyboard.dev/users/' + this.user.get('_id');
-    //this.trigger(USER.CHANGE_ALL);
+    this.storedUser = new UserModel(user);
+    this.storedUser.url = 'storyboard.dev/users/' + this.storedUser.get('_id');
+    this.trigger(USER.CHANGE_ALL);
   },
   login: function(newusername, newpassword) {
     fetch('/login', {

@@ -6,6 +6,20 @@ var router = require('./router');
 var RegisterPage = require('./registerpage.jsx');
 var NavPage = require('./NavPage');
 var HomePage = require('./homepage');
+var PostStore= require('./Post/PostStore');
+var UserStore = require('./User/UserStore');
+var _ = require('underscore');
+///constants
+var POSTS = require('./constants').POSTS;
+var USER = require('./constants').USER;
+
+
+
+var change_all_events = [
+  POSTS.CHANGE_ALL,
+  USER.CHANGE_ALL
+].join(' ');
+
 
 var App = React.createClass({
     
@@ -15,25 +29,57 @@ var App = React.createClass({
 });
 
 var InterfaceComponent = React.createClass({
-	componentWillMount: function() {
-		router.on('route', this.callBack);
+	getInitialState: function() {
+	    //PostActions.frontPagePosts();
+	    return {
+	    	posts: [],
+	    	user: {}
+	    };
 	},
-	callBack: function() {
-		this.forceUpdate();
+	componentDidMount: function() {
+		router.on('route', this.callBack);
+		PostStore.on(change_all_events, this.postChange);
+		UserStore.on(change_all_events, this.userChange);
 	},
 	componentWillUnmount: function() {
 		router.off('route', this.callBack);
+    	PostStore.off(change_all_events, this.postChange);
+    	UserStore.off(change_all_events, this.userChange);
+    },
+	callBack: function() {
+		this.forceUpdate();
+	},
+	postChange: function() {
+		this.setState(_.extend(this.state, this.getPostState()));
+		console.log('the new posts are ' + this.state.posts);
+	},
+	userChange: function() {
+		this.setState(_.extend(this.state, this.getUserState()));
+	},
+	getPostState : function() {
+		console.log('changed post state in the interface component');
+		return {
+			posts: PostStore.getPosts()
+		};
+	},
+	getUserState : function() {
+		return {
+			user: UserStore.getUser()
+		};
 	},
 	render: function() {
 		switch(router.current) {
 			case 'home':
-			return <HomePage />
+			return <HomePage {...this.state} />
 			break;
 			case 'login':
 			return <LoginPage />
 			break;
 			case 'register':
 			return <RegisterPage />
+			break;
+			case '':
+			return <NavPage />;
 			break;
 			default:
 			return <NavPage />;

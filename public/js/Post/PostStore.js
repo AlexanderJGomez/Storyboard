@@ -10,7 +10,7 @@ var PostStore = _.extend({}, Backbone.Events);
 _.extend(PostStore, {
   posts: new PostCollection,
   getPosts: function() {
-		return posts;
+		return this.posts.toJSON();
 	},
   emitChange: function() {
     this.trigger('change');
@@ -26,7 +26,7 @@ _.extend(PostStore, {
   switch(payload.actionType) {
     case POSTS.FETCH_SINGLE:
         var post_id = payload.post_id;
-        fetch('storyboard.dev/api/posts/' + post_id, {
+        fetch('api/posts/' + post_id, {
           method: 'GET'
         })
         .then(res => res.json())
@@ -48,15 +48,35 @@ _.extend(PostStore, {
         newPost.save(null, {
           success: function(post, response, options) {
             // success
-            console.log('the post said' + post.text);
+            console.log('the post said ' + response.text + ' ' + response._id);
             console.log('successful post creation in front-end');
-            newPost.set('_id', post._id);
-            newPost.set('creator', creator);
-            newPost.set('content', content);
-            newPost.set('timePosted', post.timePosted);
+            newPost.set('_id', response._id);
+            newPost.set('creator', response.creator);
+            console.log(response.creator.username);
+            newPost.set('text', content);
+            newPost.set('timePosted', response.timePosted);
+            this.trigger(POSTS.CHANGE_ALL);
+          }.bind(this),
+          error: function(collection, response, options) {
+            console.log('error saving the new post');
           }
         });
       break;
+      case POSTS.FRONTPAGE_POSTS:
+      var userID = window.storyboard.user._id;
+      this.posts.url = '/api/users/' + userID + '/frontpage';
+      console.log(this.posts.url);
+      this.posts.fetch({
+        success: function(collection, response, options) {
+          console.log('successfully fetched' +  collection.length + 'frontpage posts');
+          this.trigger(POSTS.CHANGE_ALL);
+        }.bind(this),
+        error: function(collection, response, options) {
+          console.log('error fetching frontpage posts');
+        }
+      });
+      break;
+
   }
   // If action was acted upon, emit change event
   PostStore.emitChange();
