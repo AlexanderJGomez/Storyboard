@@ -5,7 +5,8 @@ exports.POSTS  = {
 	FETCH_SINGLE: 'fetch_single',
 	CREATE: 'create',
 	FRONTPAGE_POSTS: 'frontpage_posts',
-	CHANGE_ALL: 'change_all'
+	CHANGE_ALL: 'change_all',
+	DELETE_POST: 'delete_post'
 }
 
 exports.USER = {

@@ -14,10 +14,10 @@ exports.createPost = function(id, postMap, res, next) {
             Post.populate(newPost, opts, function (err, user) {
                 if(err)
                     res.send(err);
+                return res.json(newPost);
             });
 
-        	return res.json(newPost);
-        });
+        })
 
 }
 

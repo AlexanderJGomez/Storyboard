@@ -3,6 +3,11 @@ var _ = require('underscore')
 var PostCreator = require('./Post/components/PostCreator');
 var FrontPagePosts = require('./Post/components/FrontPagePosts');
 
+var newStyle = {
+	marginLeft: 'auto',
+	marginRight:'auto',
+	maxWidth: '500'
+};
 var HomePage = React.createClass({
 	
 	render : function() {
@@ -12,7 +17,7 @@ var HomePage = React.createClass({
 		}
 		else {
 			return (
-				<div> 
+				<div style = {newStyle}> 
 					<p> Welcome to the homepage {window.storyboard.user.username} </p>
 					<PostCreator/>
 					<FrontPagePosts {...this.props}/>

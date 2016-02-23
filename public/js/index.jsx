@@ -51,7 +51,6 @@ var InterfaceComponent = React.createClass({
 	},
 	postChange: function() {
 		this.setState(_.extend(this.state, this.getPostState()));
-		console.log('the new posts are ' + this.state.posts);
 	},
 	userChange: function() {
 		this.setState(_.extend(this.state, this.getUserState()));

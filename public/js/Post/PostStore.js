@@ -49,12 +49,11 @@ _.extend(PostStore, {
           success: function(post, response, options) {
             // success
             console.log('the post said ' + response.text + ' ' + response._id);
-            console.log('successful post creation in front-end');
             newPost.set('_id', response._id);
             newPost.set('creator', response.creator);
-            console.log(response.creator.username);
             newPost.set('text', content);
             newPost.set('timePosted', response.timePosted);
+            this.posts.sort();
             this.trigger(POSTS.CHANGE_ALL);
           }.bind(this),
           error: function(collection, response, options) {
@@ -62,10 +61,10 @@ _.extend(PostStore, {
           }
         });
       break;
-      case POSTS.FRONTPAGE_POSTS:
+
+    case POSTS.FRONTPAGE_POSTS:
       var userID = window.storyboard.user._id;
       this.posts.url = '/api/users/' + userID + '/frontpage';
-      console.log(this.posts.url);
       this.posts.fetch({
         success: function(collection, response, options) {
           console.log('successfully fetched' +  collection.length + 'frontpage posts');
@@ -76,6 +75,31 @@ _.extend(PostStore, {
         }
       });
       break;
+
+    case POSTS.DELETE_POST:
+      console.log('inside delete post');
+      var postid = payload.post_id;
+      console.log(postid);
+      console.log(this.posts.at(0));
+      var post = this.posts.remove(this.posts.get(postid));
+      if(post == undefined) {
+        console.log('something went wrong while deleting posts');
+        break;
+      }
+
+
+      post.url = 'api/posts/' + postid;
+      console.log(post.url);  
+
+      post.destroy({
+        success: function() {
+          console.log('success');
+          this.trigger(POSTS.CHANGE_ALL);
+        }.bind(this)
+      });
+      break;
+
+
 
   }
   // If action was acted upon, emit change event

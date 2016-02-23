@@ -25,6 +25,12 @@ var PostActions = {
     AppDispatcher.dispatch({
       actionType: POSTS.FRONTPAGE_POSTS
     })
+  },
+  deletePost : function(postid) {
+    AppDispatcher.dispatch({
+      actionType: POSTS.DELETE_POST,
+      post_id: postid
+    })
   }
 };
 

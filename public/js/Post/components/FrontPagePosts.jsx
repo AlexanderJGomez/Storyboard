@@ -4,22 +4,27 @@ var username = window.storyboard.user.username;
 var _ = require('underscore');
 var PostActions = require('./../PostActions');
 
+var listStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  maxWidth: '500'
+}
+
 var FrontPagePosts = React.createClass({
     componentWillMount: function() {
-        console.log('component will mount')  
+        console.log('component will mount');  
         PostActions.getFrontpagePosts();
         this.setState(this.props);
-        console.log(this.props);
     },
     componentWillReceiveProps: function(nextProps) {
-        console.log('the frontpage has received the props');
         this.setState(nextProps);
     },
     render: function() {
     	var postNodes = this.state.posts.map(function(post) {
       	return (
           <div key = {post._id} >
-        	 <Post author={post.creator.username} text = {post.text} >
+        	 <Post post = {post} >
         	 </Post>
           </div>
       );
