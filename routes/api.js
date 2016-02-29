@@ -77,7 +77,7 @@ router.get('/users/:_id/frontpage', function(req, res, next) {
 
 
 // update the user with this id (accessed at PUT http://localhost:80/api/users/:_id)
-router.put('/users', function(req, res, next) {
+router.put('/users/:id', function(req, res, next) {
     	var userMap = {};
         if(req.body.userName != undefined) {
             userMap.userName = req.body.userName;
@@ -90,7 +90,7 @@ router.put('/users', function(req, res, next) {
         }
 
 
-    	userController.updateUser(req.body._id, userMap, res, next);
+    	userController.updateUser(req.params._id, userMap, res, next);
     });
 
 
@@ -183,6 +183,33 @@ router.get('/posts/:id', function(req, res, next) {
 	postController.getPost(req.params.id, res, next);
 });
 
+router.put('/posts/:id/upvote/:upvoter', function(req, res, next) {
+	postController.upvote(req.params.id, req.params.upvoter, res, next);
+})
+
+
+router.put('/posts/:id', function(req, res, next) {
+	var postMap = {};
+	if(req.body.text != undefined) {
+		postMap.text = req.body.text;
+    }
+    if(req.body.upVotes != undefined) {
+        postMap.upVotes = req.body.upVotes;
+    }
+    if(req.body.upVoters != undefined) {
+        postMap.upVoters = req.body.upVoters;
+    }
+	Post.findByIdAndUpdate(req.params.id, postMap, {new: true}, function(err, post) {
+		if(err)
+			return res.send(err);
+		var opts = [{ path: 'creator', select: 'username' }];
+        Post.populate(post, opts, function (err, user) {
+        	if(err)
+        		res.send(err);
+        	return res.json(post);
+        })
+})
+})
 
 
 

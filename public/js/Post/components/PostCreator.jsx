@@ -14,11 +14,13 @@ var PostCreator = React.createClass({
     },
     createPost : function() {
     	PostActions.createPost(this.state.text);
+    	this.setState({text: null});
     },
 	render: function() {
 		return (
 			<div>
 				<Input
+					value = {this.state.text}
 					ref = 'text'
 					type = 'text'
 					onChange = {this.handleText}

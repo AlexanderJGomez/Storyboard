@@ -31,6 +31,12 @@ var PostActions = {
       actionType: POSTS.DELETE_POST,
       post_id: postid
     })
+  },
+  upVote: function(postid) {
+    AppDispatcher.dispatch({
+      actionType: POSTS.UP_VOTE,
+      post_id: postid
+    })
   }
 };
 

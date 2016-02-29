@@ -12,6 +12,10 @@ var _ = require('underscore');
 ///constants
 var POSTS = require('./constants').POSTS;
 var USER = require('./constants').USER;
+var backgd = {
+	backgroundColor: "#eee",
+	padding: "20"
+}
 
 
 
@@ -24,7 +28,7 @@ var change_all_events = [
 var App = React.createClass({
     
     render: function() {
-    	return <div> <InterfaceComponent/> </div>
+    	return <div > <InterfaceComponent/> </div>
     }
 });
 
@@ -69,10 +73,10 @@ var InterfaceComponent = React.createClass({
 	render: function() {
 		switch(router.current) {
 			case 'home':
-			return <HomePage {...this.state} />
+			return <div style = {backgd}><HomePage {...this.state} /> </div>
 			break;
 			case 'login':
-			return <LoginPage />
+			return <div style = {backgd}><LoginPage /></div>
 			break;
 			case 'register':
 			return <RegisterPage />

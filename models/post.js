@@ -24,7 +24,10 @@ var postSchema = mongoose.Schema({
 		type: Number,
 		default: 0
 	},
-	upVoters: [{ type: String, ref: 'User' }]
+	upVoters: {
+		type: [{ type: String, ref: 'User' }],
+		default: []
+	}
 	//comments: [{ type: String, ref: 'Comment' }],
 });
 

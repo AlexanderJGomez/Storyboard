@@ -6,7 +6,8 @@ exports.POSTS  = {
 	CREATE: 'create',
 	FRONTPAGE_POSTS: 'frontpage_posts',
 	CHANGE_ALL: 'change_all',
-	DELETE_POST: 'delete_post'
+	DELETE_POST: 'delete_post',
+	UP_VOTE: 'up_vote'
 }
 
 exports.USER = {

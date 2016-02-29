@@ -40,6 +40,28 @@ exports.getAllPosts = function(res, next) {
         });
 }
 
+exports.upvote = function(postid, upvoterid, res, next) {
+    Post.findById(postid, function(err, post) {
+        if(err)
+            return res.send(err)
+        else if(post.upVoters.indexOf(upvoterid) < 0) {
+            post.upVotes = post.upVotes + 1;
+            post.upVoters.push(upvoterid);
+            console.log(post);
+            post.save(function(err) {
+                if (err)
+                    return res.send(err)
+                var opts = [{ path: 'creator', select: 'username' }];
+                Post.populate(post, opts, function (err, post2) {
+                if(err)
+                    res.send(err);
+                return res.json(post2);
+            });
+            })
+        }
+    })
+}
+
 
 
 

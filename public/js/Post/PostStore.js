@@ -53,6 +53,7 @@ _.extend(PostStore, {
             newPost.set('creator', response.creator);
             newPost.set('text', content);
             newPost.set('timePosted', response.timePosted);
+            //sort after adding ne post and before triggering the change
             this.posts.sort();
             this.trigger(POSTS.CHANGE_ALL);
           }.bind(this),
@@ -67,7 +68,7 @@ _.extend(PostStore, {
       this.posts.url = '/api/users/' + userID + '/frontpage';
       this.posts.fetch({
         success: function(collection, response, options) {
-          console.log('successfully fetched' +  collection.length + 'frontpage posts');
+          console.log('successfully fetched ' +  collection.length + ' frontpage post(s)');
           this.trigger(POSTS.CHANGE_ALL);
         }.bind(this),
         error: function(collection, response, options) {
@@ -77,10 +78,7 @@ _.extend(PostStore, {
       break;
 
     case POSTS.DELETE_POST:
-      console.log('inside delete post');
       var postid = payload.post_id;
-      console.log(postid);
-      console.log(this.posts.at(0));
       var post = this.posts.remove(this.posts.get(postid));
       if(post == undefined) {
         console.log('something went wrong while deleting posts');
@@ -93,11 +91,44 @@ _.extend(PostStore, {
 
       post.destroy({
         success: function() {
-          console.log('success');
+          console.log('successful delete');
           this.trigger(POSTS.CHANGE_ALL);
         }.bind(this)
       });
       break;
+    case POSTS.UP_VOTE:
+    var id  = payload.post_id;
+    console.log('in upvote with id ' + id);
+    var post = this.posts.get(id);
+    console.log(post.get('upVoters').length + ' adding ' + window.storyboard.user._id);
+    var postMap = {};
+    postMap.upVotes = post.get('upVotes') + 1;
+    var voters = post.get('upVoters');
+    if(voters == undefined || voters == null) {
+      voters = [ window.storyboard._id ];
+      console.log('the list of voters was empty');
+    }
+    else {
+      voters.push(window.storyboard.user._id)
+      console.log(voters.length);
+    }
+    console.log(voters);
+    postMap.upVoters = voters;
+    post.url = 'api/posts/' + id;
+    post.save(postMap, {
+      success: function(model, response, options) {
+        console.log('saved ' + response.toJSON);
+        this.trigger(POSTS.CHANGE_ALL);
+      }.bind(this),
+      error: function(model, response, options) {
+        console.log('error upvoting');
+      }
+    }
+      );
+      break;
+
+
+
 
 
 
