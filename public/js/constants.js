@@ -15,3 +15,10 @@ exports.USER = {
 	REGISTER: 'register',
 	CHANGE_ALL: 'change_all'
 }
+
+exports.INVITES = {
+	ACCEPT: 'accept',
+	REQUEST: 'request',
+	GET_INVITES: "get_invites",
+	CHANGE_ALL: 'change_all'
+}

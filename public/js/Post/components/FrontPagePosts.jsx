@@ -8,7 +8,7 @@ var listStyle = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  maxWidth: '500'
+  width: '1000'
 }
 
 var FrontPagePosts = React.createClass({
@@ -30,7 +30,7 @@ var FrontPagePosts = React.createClass({
       );
     });
     return (
-      <div className="postList">
+      <div className="postList" style = {listStyle}>
         {postNodes}
       </div>
     );

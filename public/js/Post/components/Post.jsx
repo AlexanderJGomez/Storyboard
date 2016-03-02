@@ -11,17 +11,25 @@ var topStyle = {
 var postStyle = {
   display: 'flex',
   flexDirection : 'column',
-  marginTop: '20',
-  marginBottom: '20',
+  marginTop: '10',
+  marginBottom: '10',
   padding: '20',
-  background: "white"
+  background: "white",
+  width: '500'
 }
 //background: "#eee",
-var textStyle = {
+var footerStyle = {
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'flex-start',
   justifyContent: 'space-between'
+}
+
+var textWrapper = {
+  border: '1px solid',
+  padding: '10',
+  marginTop: '5',
+  marginBottom: '5'
 }
 
 
@@ -46,10 +54,14 @@ var Post = React.createClass({
               {this.props.post.creator.username} :
             </h3>
           </div>
-          <div style = {textStyle}>
+
+          <div style = {textWrapper}>
             <p>{this.props.post.text}</p>
-            <div>
+          </div>
+
+          <div style = {footerStyle}>
               <p> posted {daysPast} days ago </p>
+              <div>
               <p> {this.props.post.upVotes} up votes</p>
               <Button 
               bsSize = 'xs'
@@ -57,7 +69,7 @@ var Post = React.createClass({
               >
                 <i className = 'glyphicon glyphicon-chevron-up' />
               </Button>
-            </div>
+              </div>
           </div>
         </div>
     );
@@ -76,8 +88,13 @@ var Post = React.createClass({
             <i className = 'glyphicon glyphicon-remove' />
           </Button>
         </div>
-        <div style = {textStyle}>
+
+        <div style = {textWrapper}>
           <p>{this.props.post.text}</p>
+        </div>
+
+        <div style = {footerStyle}>
+          <p> {this.props.post.upVotes} up votes</p>
           <p>posted {daysPast} days ago</p>
         </div>
       </div>

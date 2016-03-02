@@ -97,59 +97,63 @@ router.put('/users/:id', function(req, res, next) {
 ///////delete a user
 router.delete('/users/:_id', function(req, res, next) {
         userController.removeUser(req, res, next);
-
     });
 
 
+
+/////////////////////////////////////////////////
+/////////////////////////////////////////////////
+///////////////////////INVITES///////////////////
+/////////////////////////////////////////////////
+/////////////////////////////////////////////////
+
+
+
 //request friendship
-router.put('/users/request/:_originid/:_targetid', function(req, res, next) { 
+router.post('/invites', function(req, res, next) { 
+	User.findById(req.body.originid, function(err, user) {
+		if(err)
+			return res.send(err);
+		
+		if(user == undefined) {
+			return res.json({message: 'origin was not found'});
+		}
 	
-		User.findById(req.params._originid, function(err, user) {
-			if(user == undefined) {
-				return res.json({message: 'origin was not found'});
-			}
-		
+		console.log(user.friends.indexOf(req.body.targetid));
 
-			console.log(user.friends.indexOf(req.params._targetid));
+		if(user.friends.indexOf(req.body.targetid) >= 0) {
+			return res.json({message : 'already friends'});
+		}
+		else {
+			Invite.findOne({
+				origin: req.body.originid,
+				target: req.body.targetid
+			}, function(err, invite) {
+					if(err) {
+						return res.send(err);
+					}
+					else if(invite == undefined) {
+						inviteController.requestFriend(req.body.originid, req.body.targetid, res, next);
 
-			if(user.friends.indexOf(req.params._targetid) >= 0) {
-				return res.json({message : 'already friends'});
-			}
-			else {
-				Invite.findOne({
-					origin: req.params._originid,
-					target: req.params._targetid}, new function(err, invite) {
-						if(err) {
-							return res.send(err);
-						}
-						else if(invite == undefined) {
-							inviteController.requestFriend(req.params._originid, req.params._targetid, res, next);
-
-						}
-						else {
-							return res.json({message: 'Your request is pending'});
-				//next();
-						}
-				});
-	//console.log('adding friends  %s  and  %s', req.params._id1, req.params._id		}
-		}});
-
-		
+					}
+					else {
+						return res.json({message: 'Your request is pending'});
+					}
+			});
+	}});
 });
 
 
 
 
 //accept each other to both users friends lists
-router.put('/users/accept/:_originid/:_targetid', function(req, res, next) { 
-	//console.log('adding friends  %s  and  %s', req.params.originid, req.params.targetid);
-	User.findById(req.params._originid, function(err, user) {
-		if(user.friends.indexOf(req.params._targetid) >= 0) {
+router.delete('/invites', function(req, res, next) { 
+	User.findById(req.body.originid, function(err, user) {
+		if(user.friends.indexOf(req.body.targetid) >= 0) {
 			return res.json({message : 'They are already friends'});
-			//next();
 		}
 		else {
-			inviteController.acceptFriend(req.params._originid, req.params._targetid, res, next);
+			inviteController.acceptFriend(req.body.originid, req.body.targetid, res, next);
 		}
 	});
 });
@@ -157,9 +161,28 @@ router.put('/users/accept/:_originid/:_targetid', function(req, res, next) {
 
 
 
+
+router.get('/users/:id/invites', function(req, res, next) {
+	Invite.find({ $or:[ {'origin':req.params.id}, {'target':req.params.id}]}, function(err, invites) {
+		if(err)
+			return res.send(err);
+		return res.json(invites);
+	});
+})
+
+
+
+
+
+
+
+
 ////////////////////////////////////////////////////////
 //////////////////POST ROUTES///////////////////////////
 ////////////////////////////////////////////////////////
+
+
+
 
 
 

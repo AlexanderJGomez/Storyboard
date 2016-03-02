@@ -36,7 +36,6 @@ _.extend(PostStore, {
 
     case POSTS.CREATE:
       var content = payload.text;
-      console.log(payload.text);
       var creator = window.storyboard.user._id;
       var newPost = this.posts.add({
         creator : creator,
@@ -48,7 +47,7 @@ _.extend(PostStore, {
         newPost.save(null, {
           success: function(post, response, options) {
             // success
-            console.log('the post said ' + response.text + ' ' + response._id);
+            console.log('success');
             newPost.set('_id', response._id);
             newPost.set('creator', response.creator);
             newPost.set('text', content);
@@ -87,7 +86,6 @@ _.extend(PostStore, {
 
 
       post.url = 'api/posts/' + postid;
-      console.log(post.url);  
 
       post.destroy({
         success: function() {
@@ -98,9 +96,7 @@ _.extend(PostStore, {
       break;
     case POSTS.UP_VOTE:
     var id  = payload.post_id;
-    console.log('in upvote with id ' + id);
     var post = this.posts.get(id);
-    console.log(post.get('upVoters').length + ' adding ' + window.storyboard.user._id);
     var postMap = {};
     postMap.upVotes = post.get('upVotes') + 1;
     var voters = post.get('upVoters');
@@ -126,9 +122,6 @@ _.extend(PostStore, {
     }
       );
       break;
-
-
-
 
 
 

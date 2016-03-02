@@ -1,17 +1,26 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var LoginPage = require('./loginpage.jsx');
+var _ = require('underscore');
 var injectTapEventPlugin = require("react-tap-event-plugin");
 var router = require('./router');
+
+
+//REACT COMPONENTS
+var LoginPage = require('./loginpage.jsx');
 var RegisterPage = require('./registerpage.jsx');
 var NavPage = require('./NavPage');
+
+//STORES
 var HomePage = require('./homepage');
 var PostStore= require('./Post/PostStore');
 var UserStore = require('./User/UserStore');
-var _ = require('underscore');
+var InviteStore = require('./Invite/InviteStore');
+
+
 ///constants
 var POSTS = require('./constants').POSTS;
 var USER = require('./constants').USER;
+var INVITES = require('./constants').INVITES;
 var backgd = {
 	backgroundColor: "#eee",
 	padding: "20"
@@ -21,7 +30,8 @@ var backgd = {
 
 var change_all_events = [
   POSTS.CHANGE_ALL,
-  USER.CHANGE_ALL
+  USER.CHANGE_ALL,
+  INVITES.CHANGE_ALL
 ].join(' ');
 
 
@@ -37,18 +47,22 @@ var InterfaceComponent = React.createClass({
 	    //PostActions.frontPagePosts();
 	    return {
 	    	posts: [],
-	    	user: {}
+	    	user: {},
+	    	invites: []
 	    };
 	},
 	componentDidMount: function() {
 		router.on('route', this.callBack);
 		PostStore.on(change_all_events, this.postChange);
 		UserStore.on(change_all_events, this.userChange);
+		InviteStore.on(change_all_events, this.inviteChange)
 	},
 	componentWillUnmount: function() {
 		router.off('route', this.callBack);
     	PostStore.off(change_all_events, this.postChange);
     	UserStore.off(change_all_events, this.userChange);
+    	InviteStore.off(change_all_events, this.inviteChange);
+
     },
 	callBack: function() {
 		this.forceUpdate();
@@ -59,10 +73,18 @@ var InterfaceComponent = React.createClass({
 	userChange: function() {
 		this.setState(_.extend(this.state, this.getUserState()));
 	},
+	inviteChange: function() {
+		this.setState(_.extend(this.state, this.getInviteState()));
+	},
 	getPostState : function() {
 		console.log('changed post state in the interface component');
 		return {
 			posts: PostStore.getPosts()
+		};
+	},
+	getInviteState: function() {
+		return {
+			invites: InviteStore.getInvites()
 		};
 	},
 	getUserState : function() {
@@ -73,19 +95,25 @@ var InterfaceComponent = React.createClass({
 	render: function() {
 		switch(router.current) {
 			case 'home':
-			return <div style = {backgd}><HomePage {...this.state} /> </div>
+			return <HomePage {...this.state} />
 			break;
+
 			case 'login':
-			return <div style = {backgd}><LoginPage /></div>
+			return <LoginPage />
 			break;
+
 			case 'register':
 			return <RegisterPage />
 			break;
+
 			case '':
 			return <NavPage />;
 			break;
+
 			default:
-			return <NavPage />;
+			return (<div>
+				<p>Page not found</p>
+			 </div>);
 			break;
 		}
 	}
