@@ -110,8 +110,8 @@ router.delete('/users/:_id', function(req, res, next) {
 
 
 //request friendship
-router.post('/invites', function(req, res, next) { 
-	User.findById(req.body.originid, function(err, user) {
+router.post('/users/:originid/invites/:targetid', function(req, res, next) { 
+	User.findById(req.params.originid, function(err, user) {
 		if(err)
 			return res.send(err);
 		
@@ -119,21 +119,21 @@ router.post('/invites', function(req, res, next) {
 			return res.json({message: 'origin was not found'});
 		}
 	
-		console.log(user.friends.indexOf(req.body.targetid));
+		console.log(user.friends.indexOf(req.params.targetid));
 
-		if(user.friends.indexOf(req.body.targetid) >= 0) {
+		if(user.friends.indexOf(req.params.targetid) >= 0) {
 			return res.json({message : 'already friends'});
 		}
 		else {
 			Invite.findOne({
-				origin: req.body.originid,
-				target: req.body.targetid
+				origin: req.params.originid,
+				target: req.params.targetid
 			}, function(err, invite) {
 					if(err) {
 						return res.send(err);
 					}
 					else if(invite == undefined) {
-						inviteController.requestFriend(req.body.originid, req.body.targetid, res, next);
+						inviteController.requestFriend(req.params.originid, req.params.targetid, res, next);
 
 					}
 					else {
@@ -147,13 +147,13 @@ router.post('/invites', function(req, res, next) {
 
 
 //accept each other to both users friends lists
-router.delete('/invites', function(req, res, next) { 
-	User.findById(req.body.originid, function(err, user) {
-		if(user.friends.indexOf(req.body.targetid) >= 0) {
+router.delete('/users/:originid/invites/:targetid', function(req, res, next) { 
+	User.findById(req.params.originid, function(err, user) {
+		if(user.friends.indexOf(req.params.targetid) >= 0) {
 			return res.json({message : 'They are already friends'});
 		}
 		else {
-			inviteController.acceptFriend(req.body.originid, req.body.targetid, res, next);
+			inviteController.acceptFriend(req.params.originid, req.params.targetid, res, next);
 		}
 	});
 });
@@ -167,7 +167,8 @@ router.get('/users/:id/invites', function(req, res, next) {
 		if(err)
 			return res.send(err);
 		return res.json(invites);
-	});
+	}).populate('origin', 'username')
+	.populate('target', 'username');
 })
 
 
@@ -242,7 +243,6 @@ router.delete('/posts/:_id', function(req, res, next) {
         }, function(err, post) {
             if (err)
                 return res.send(err);
-
             return res.json({ message: 'Successfully deleted post' });
         });
 });

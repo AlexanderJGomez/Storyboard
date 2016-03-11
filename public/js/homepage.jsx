@@ -4,6 +4,7 @@ var {Button} = require('react-bootstrap');
 var PostCreator = require('./Post/components/PostCreator');
 var FrontPagePosts = require('./Post/components/FrontPagePosts');
 var Router = require('./router');
+var InviteList = require('./Invite/components/InviteList');
 
 var newStyle = {
 	marginLeft: 'auto',
@@ -55,7 +56,10 @@ var HomePage = React.createClass({
 		}
 		else {
 			return (
-				<div style ={backgd}>
+				<div style = {backgd}>
+					<div>
+						<InviteList {...this.props}/>
+					</div>
 					<div style = {LogOutStyle}>
 							<form action="/logout" method="get">
                     		<div>

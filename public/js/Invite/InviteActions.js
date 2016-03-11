@@ -9,11 +9,15 @@ var InviteActions = {
 		})
 	},
 	accept: function(originid) {
-		actionType: INVITES.ACCEPT,
-		origin: originid
+		AppDispatcher.dispatch({
+			actionType: INVITES.ACCEPT,
+			origin: originid
+		})
 	},
-	getGetInvites: function() {
-		actionType: INVITES.GET_INVITES
+	getInvites: function() {
+		AppDispatcher.dispatch({
+			actionType: INVITES.GET_INVITES
+		})
 	}
 }
 

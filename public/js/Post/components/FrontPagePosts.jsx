@@ -8,7 +8,8 @@ var listStyle = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  width: '1000'
+  width: '1000',
+  flexShrink: '.5'
 }
 
 var FrontPagePosts = React.createClass({
@@ -21,7 +22,7 @@ var FrontPagePosts = React.createClass({
         this.setState(nextProps);
     },
     render: function() {
-    	var postNodes = this.state.posts.map(function(post) {
+      var postNodes = this.state.posts.map(function(post) {
       	return (
           <div key = {post._id} >
         	 <Post post = {post} >

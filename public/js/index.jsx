@@ -21,10 +21,7 @@ var InviteStore = require('./Invite/InviteStore');
 var POSTS = require('./constants').POSTS;
 var USER = require('./constants').USER;
 var INVITES = require('./constants').INVITES;
-var backgd = {
-	backgroundColor: "#eee",
-	padding: "20"
-}
+
 
 
 
@@ -36,7 +33,10 @@ var change_all_events = [
 
 
 var App = React.createClass({
-    
+    componentWillMount: function() {
+    	document.body.style.backgroundColor = "#eee";
+    	document.body.style.padding = '0';
+	},
     render: function() {
     	return <div > <InterfaceComponent/> </div>
     }
@@ -77,7 +77,6 @@ var InterfaceComponent = React.createClass({
 		this.setState(_.extend(this.state, this.getInviteState()));
 	},
 	getPostState : function() {
-		console.log('changed post state in the interface component');
 		return {
 			posts: PostStore.getPosts()
 		};
@@ -111,9 +110,7 @@ var InterfaceComponent = React.createClass({
 			break;
 
 			default:
-			return (<div>
-				<p>Page not found</p>
-			 </div>);
+			return (<NavPage />);
 			break;
 		}
 	}

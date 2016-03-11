@@ -57,7 +57,19 @@ _.extend(InviteStore, {
     break;
     
     case INVITES.GET_INVITES:
-
+    var userID = window.storyboard.user._id;
+    console.log('getting invites');
+      this.invites.url = '/api/users/'+ userID + '/invites';
+      this.invites.fetch({
+        success: function(collection, response, options) {
+          console.log('successfully fetched ' +  collection.length + ' invite(s)');
+          this.trigger(INVITES.CHANGE_ALL);
+        }.bind(this),
+        error: function(collection, response, options) {
+          console.log('error fetching invites');
+        }
+      });
+      break;
     break;
   }
   // If action was acted upon, emit change event

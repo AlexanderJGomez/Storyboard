@@ -26,10 +26,10 @@ var footerStyle = {
 }
 
 var textWrapper = {
-  border: '1px solid',
   padding: '10',
   marginTop: '5',
-  marginBottom: '5'
+  marginBottom: '5',
+  background: '#eee'
 }
 
 
@@ -45,6 +45,9 @@ var Post = React.createClass({
   render: function() {
     var datems = Date.now() - Date.parse(this.props.post.timePosted);
     var daysPast = Math.round((((datems / 1000) / 60) / 60) / 24);
+    var dayText = daysPast + ' days';
+    if (daysPast == 1)
+      dayText = daysPast + ' day';
 
     if(this.props.post.creator.username != window.storyboard.user.username) {
       return (
@@ -60,7 +63,7 @@ var Post = React.createClass({
           </div>
 
           <div style = {footerStyle}>
-              <p> posted {daysPast} days ago </p>
+              <p> posted {dayText} ago </p>
               <div>
               <p> {this.props.post.upVotes} up votes</p>
               <Button 
@@ -95,7 +98,7 @@ var Post = React.createClass({
 
         <div style = {footerStyle}>
           <p> {this.props.post.upVotes} up votes</p>
-          <p>posted {daysPast} days ago</p>
+          <p>posted {dayText} ago</p>
         </div>
       </div>
     );
